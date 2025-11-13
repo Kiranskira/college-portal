@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>All Teachers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 70px;
+        }
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 53, 102, 0.87);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffcc00 !important;
+            font-size: 1.5rem;
+        }
+        .navbar-nav .nav-link {
+            color: #e0e0e0 !important;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            margin-left: 1rem;
+        }
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:hover {
+            color: #ffcc00 !important;
+            text-decoration: underline;
+            transform: translateY(-2px);
+        }
+        .container {
+            max-width: 1150px;
+        }
+        h2 {
+            color: #143c6a;
+            font-weight: 800;
+            font-size: 2.25rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: 0.7px;
+        }
+        table {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 53, 102, 0.10);
+            background-color: #fff;
+        }
+        thead {
+            background-color: #0d6efd;
+            color: #fff;
+            font-weight: 700;
+        }
+        thead th {
+            text-align: center;
+            vertical-align: middle;
+        }
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+        tbody tr:hover {
+            background-color: #e9f0ff;
+        }
+        tbody td {
+            vertical-align: middle;
+            text-align: center;
+            font-weight: 500;
+        }
+        img.rounded-circle {
+            object-fit: cover;
+        }
+        .btn-danger {
+            border-radius: 50px;
+            font-weight: 700;
+            padding: 0.25rem 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #b02a37;
+            box-shadow: 0 4px 12px rgba(176, 42, 55, 0.7);
+        }
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.75rem;
+            }
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .navbar-nav .nav-link {
+                margin-left: 0.6rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Admin Dashboard</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if current_page == 'student' %}active{% endif %}" href="{% url 'student' %}">Students</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if current_page == 'course' %}active{% endif %}" href="{% url 'course' %}">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if current_page == 'show_details' %}active{% endif %}" href="{% url 'show_details' %}">Show Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if current_page == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}">Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+        <div 
+            class="alert {% if message.tags == 'success' %}alert-success
+                        {% elif message.tags == 'error' %}alert-danger
+                        {% elif message.tags == 'warning' %}alert-warning
+                        {% else %}alert-info{% endif %} alert-dismissible fade show" 
+            role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+    <div class="container py-5">
+        <h2 class="fw-bold">Registered Teachers</h2>
+        {% if teachers %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle text-center mb-0">
+                <thead>
+                    <tr>
+                        <th>SL.NO</th>
+                        <th>Photo</th>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Age</th>
+                        <th>Address</th>
+                        <th>Course</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in teachers %}
+                    <tr>
+                       <td>{{ forloop.counter }}</td>  
+                        <td>
+                            <img
+                                src="{{ teacher.image.url }}"
+                                alt="Teacher Photo"
+                                class="rounded-circle"
+                                width="80"
+                                height="80"
+                            />
+                        </td>
+                        <td>{{ teacher.fname }} {{ teacher.lname }}</td>
+                        <td>{{ teacher.username }}</td>
+                        <td>{{ teacher.email }}</td>
+                        <td>{{ teacher.phone }}</td>
+                        <td>{{ teacher.age }}</td>
+                        <td>{{ teacher.address }}</td>
+                        <td>{{ teacher.course.coursename }}</td>
+                        <td>
+                            <a href="{% url 'delete_teacher' teacher.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No teachers registered yet.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
