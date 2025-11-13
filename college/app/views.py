@@ -47,7 +47,10 @@ def add_course(request):
 
 
 # ---------------- STUDENT SECTION ----------------
-
+@login_required(login_url='loginfun')
+def student(request):
+    crs = Course.objects.all()
+    return render(request, 'student.html', {'course': crs})
 
 @login_required(login_url='loginfun')
 def add_student(request):
